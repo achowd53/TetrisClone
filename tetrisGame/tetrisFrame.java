@@ -1,12 +1,27 @@
-package tetrisGame;
-
 import javax.swing.*;
 import java.awt.*;
+import tetrisGame.tetrisPiece;
 
 public class tetrisFrame extends JPanel {
     private boolean gameRunning;
+    private int[][] board;
+    private tetrisPiece curPiece;
+    private tetrisPiece nextPiece;
 
-    private int[][] a;
+    public tetrisFrame() {
+    };
+
+    public tetrisFrame(boolean gameRunning, int[][] board, tetrisPiece curPiece, tetrisPiece nextPiece) {
+        this.gameRunning = gameRunning;
+        this.board = board;
+        this.curPiece = curPiece;
+        this.nextPiece = nextPiece;
+    }
+
+    // Red, Orange, Yellow, Lime, Cyan, Cerulean, Magenta, Rose, Gray
+    private Color[] intColor = { new Color(255, 0, 0), new Color(255, 165, 0), new Color(255, 255, 0),
+            new Color(0, 255, 0), new Color(0, 255, 255), new Color(42, 82, 190), new Color(255, 0, 255),
+            new Color(255, 0, 127), new Color(128, 128, 128) };
 
     @Override
     protected void paintComponent(Graphics g) {
