@@ -1,11 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class emptyFrame extends JPanel {
-    JLabel linesCleared;
-    JLabel timeTaken;
-    JLabel highScore;
-    JLabel highScoreTime;
+public class tetrisFrame extends JPanel {
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -42,7 +38,7 @@ public class emptyFrame extends JPanel {
     public static void createAndShowGui() {
         JFrame gui = new JFrame("TetrisClone V1.0.0");
         gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        gui.setContentPane(new emptyFrame());
+        gui.setContentPane(new tetrisFrame());
         // gui.setLocationByPlatform(true);
         gui.setSize(600, 800);
         gui.setVisible(true);
