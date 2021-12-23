@@ -288,4 +288,12 @@ public class tetrisPiece {
             }
         }
     }
+
+    public int[][] getBoard() { // Return board positions of piece
+        return this.piecePosition[0];
+    }
+
+    public int[][] getNext() { // Return next display of piece
+        return this.piecePosition[1];
+    }
 }

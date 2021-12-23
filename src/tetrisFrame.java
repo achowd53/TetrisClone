@@ -24,6 +24,7 @@ public class tetrisFrame extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.setFont(Font.getFont("Helvetica Nueva Bold"));
+        g.setColor(Color.BLACK);
         // Seperate Tetris Frame from Side Bar
         for (int x = 400; x <= 420; x += 20)
             g.drawLine(x, 0, x, 800);
@@ -50,6 +51,27 @@ public class tetrisFrame extends JPanel {
         g.drawString("                Time Taken:", 420, 385);
         g.drawString("                 High Score:", 420, 425);
         g.drawString(" Time For High Score:", 420, 465);
+        // If game has started, display board, next, and tetris piece
+        if (gameStarted) {
+            for (int[] box : board) {
+                g.setColor(intColor[box[2]]);
+                g.fillRect(box[0], box[1], 40, 40);
+                g.setColor(Color.BLACK);
+                g.drawRect(box[0], box[1], 40, 40);
+            }
+            for (int[] box : curPiece.getBoard()) {
+                g.setColor(intColor[box[2]]);
+                g.fillRect(box[0], box[1], 40, 40);
+                g.setColor(Color.BLACK);
+                g.drawRect(box[0], box[1], 40, 40);
+            }
+            for (int[] box : nextPiece.getNext()) {
+                g.setColor(intColor[box[2]]);
+                g.fillRect(box[0], box[1], 40, 40);
+                g.setColor(Color.BLACK);
+                g.drawRect(box[0], box[1], 40, 40);
+            }
+        }
     };
 
     public static void createAndShowGui() {
