@@ -48,9 +48,9 @@ public class tetrisPiece {
         }
     }
 
-    public boolean checkCollision(int[][] board) { // Check if piece either collides with board or is out of bounds
+    public boolean checkValidBounds(int[][] board) { // Check if piece is in valid position
         for (int[] part : piecePosition[0]) {
-            if (part[0] < 0 || part[0] > 360 || part[1] < 0 || part[1] > 760)
+            if (part[0] < 0 || part[0] > 360 || part[1] > 760)
                 return false;
             for (int[] boardBlock : board) {
                 if (part[0] == boardBlock[0] && part[1] == boardBlock[1])
@@ -58,6 +58,18 @@ public class tetrisPiece {
             }
         }
         return true;
+    }
+
+    public boolean checkCollision(int[][] board) { // Check if piece collides with board
+        for (int[] part : piecePosition[0]) {
+            if (part[1] == 760)
+                return true;
+            for (int[] boardBlock : board) {
+                if (part[0] == boardBlock[0] && part[1] + 40 == boardBlock[1])
+                    return true;
+            }
+        }
+        return false;
     }
 
     public void upOne() { // Bring piece up a square
