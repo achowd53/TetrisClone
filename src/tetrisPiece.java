@@ -98,65 +98,193 @@ public class tetrisPiece {
     }
 
     public void rotateRight() { // Rotate piece right
-        if (piece == tetromino.I) {
+        if (piece == tetromino.I) { //
             if (rot == 0) {
                 rot = 1;
+                piecePosition[0][0][0] += 40;
+                piecePosition[0][0][1] += 80;
+                piecePosition[0][1][1] += 40;
+                piecePosition[0][2][0] -= 40;
+                piecePosition[0][3][0] -= 80;
+                piecePosition[0][3][1] -= 40;
             } else if (rot == 1) {
                 rot = 2;
+                piecePosition[0][0][0] -= 80;
+                piecePosition[0][0][1] -= 80;
+                piecePosition[0][1][0] -= 40;
+                piecePosition[0][1][1] -= 40;
+                piecePosition[0][3][0] += 40;
+                piecePosition[0][3][1] += 40;
             } else if (rot == 2) {
                 rot = 3;
+                piecePosition[0][0][0] -= 40;
+                piecePosition[0][0][1] += 40;
+                piecePosition[0][2][0] += 40;
+                piecePosition[0][2][1] -= 40;
+                piecePosition[0][3][0] += 80;
+                piecePosition[0][3][1] -= 80;
             } else {
                 rot = 0;
+                piecePosition[0][0][0] += 80;
+                piecePosition[0][0][1] -= 40;
+                piecePosition[0][1][0] += 40;
+                piecePosition[0][2][1] += 40;
+                piecePosition[0][3][0] -= 40;
+                piecePosition[0][3][1] += 80;
             }
-        } else if (piece == tetromino.S) {
+        } else if (piece == tetromino.S) { //
             if (rot == 0) {
                 rot = 1;
+                piecePosition[0][0][0] -= 40;
+                piecePosition[0][0][1] += 40;
+                piecePosition[0][2][0] -= 40;
+                piecePosition[0][2][1] -= 40;
+                piecePosition[0][3][1] -= 80;
             } else if (rot == 1) {
                 rot = 2;
+                piecePosition[0][0][0] -= 40;
+                piecePosition[0][0][1] -= 40;
+                piecePosition[0][2][0] += 40;
+                piecePosition[0][2][1] -= 40;
+                piecePosition[0][3][0] += 80;
             } else if (rot == 2) {
                 rot = 3;
+                piecePosition[0][0][0] += 40;
+                piecePosition[0][0][1] -= 40;
+                piecePosition[0][2][0] += 40;
+                piecePosition[0][2][1] = +40;
+                piecePosition[0][3][1] += 80;
             } else {
-                rot = 4;
+                rot = 0;
+                piecePosition[0][0][0] += 40;
+                piecePosition[0][0][1] += 40;
+                piecePosition[0][2][0] -= 40;
+                piecePosition[0][2][1] += 40;
+                piecePosition[0][3][0] -= 80;
             }
-        } else if (piece == tetromino.Z) {
+        } else if (piece == tetromino.Z) { //
             if (rot == 0) {
                 rot = 1;
+                piecePosition[0][0][0] += 40;
+                piecePosition[0][0][1] -= 40;
+                piecePosition[0][2][0] -= 40;
+                piecePosition[0][2][1] -= 40;
+                piecePosition[0][3][0] -= 80;
             } else if (rot == 1) {
                 rot = 2;
+                piecePosition[0][0][0] += 40;
+                piecePosition[0][0][1] += 40;
+                piecePosition[0][2][0] += 40;
+                piecePosition[0][2][1] -= 40;
+                piecePosition[0][3][1] -= 80;
             } else if (rot == 2) {
                 rot = 3;
+                piecePosition[0][0][0] -= 40;
+                piecePosition[0][0][1] += 40;
+                piecePosition[0][2][0] += 40;
+                piecePosition[0][2][1] += 40;
+                piecePosition[0][3][0] += 80;
             } else {
-                rot = 4;
+                rot = 0;
+                piecePosition[0][0][0] -= 40;
+                piecePosition[0][0][1] -= 40;
+                piecePosition[0][2][0] -= 40;
+                piecePosition[0][2][1] += 40;
+                piecePosition[0][3][1] += 80;
             }
-        } else if (piece == tetromino.L) {
+        } else if (piece == tetromino.L) { //
             if (rot == 0) {
                 rot = 1;
+                piecePosition[0][0][0] += 40;
+                piecePosition[0][0][1] += 40;
+                piecePosition[0][2][0] -= 40;
+                piecePosition[0][2][1] -= 40;
+                piecePosition[0][3][0] -= 80;
             } else if (rot == 1) {
                 rot = 2;
+                piecePosition[0][0][0] -= 40;
+                piecePosition[0][0][1] += 40;
+                piecePosition[0][2][0] += 40;
+                piecePosition[0][2][1] -= 40;
+                piecePosition[0][3][1] -= 80;
             } else if (rot == 2) {
                 rot = 3;
+                piecePosition[0][0][0] -= 40;
+                piecePosition[0][0][1] -= 40;
+                piecePosition[0][2][0] += 40;
+                piecePosition[0][2][1] += 40;
+                piecePosition[0][3][0] += 80;
             } else {
-                rot = 4;
+                rot = 0;
+                piecePosition[0][0][0] += 40;
+                piecePosition[0][0][1] -= 40;
+                piecePosition[0][2][0] -= 40;
+                piecePosition[0][2][1] += 40;
+                piecePosition[0][3][1] += 80;
             }
-        } else if (piece == tetromino.J) {
+        } else if (piece == tetromino.J) { //
             if (rot == 0) {
                 rot = 1;
+                piecePosition[0][0][0] += 40;
+                piecePosition[0][0][1] += 40;
+                piecePosition[0][2][0] -= 40;
+                piecePosition[0][2][1] -= 40;
+                piecePosition[0][3][1] -= 80;
             } else if (rot == 1) {
                 rot = 2;
+                piecePosition[0][0][0] -= 40;
+                piecePosition[0][0][1] += 40;
+                piecePosition[0][2][0] += 40;
+                piecePosition[0][2][1] -= 40;
+                piecePosition[0][3][0] += 80;
             } else if (rot == 2) {
                 rot = 3;
+                piecePosition[0][0][0] -= 40;
+                piecePosition[0][0][1] -= 40;
+                piecePosition[0][2][0] += 40;
+                piecePosition[0][2][1] += 40;
+                piecePosition[0][3][1] += 80;
             } else {
-                rot = 4;
+                rot = 0;
+                piecePosition[0][0][0] += 40;
+                piecePosition[0][0][1] -= 40;
+                piecePosition[0][2][0] -= 40;
+                piecePosition[0][2][1] += 40;
+                piecePosition[0][3][0] -= 80;
             }
         } else if (piece == tetromino.T) {
             if (rot == 0) {
                 rot = 1;
+                piecePosition[0][0][0] += 40;
+                piecePosition[0][0][1] -= 40;
+                piecePosition[0][2][0] -= 40;
+                piecePosition[0][2][1] += 40;
+                piecePosition[0][3][0] -= 40;
+                piecePosition[0][3][1] -= 40;
             } else if (rot == 1) {
                 rot = 2;
+                piecePosition[0][0][0] += 40;
+                piecePosition[0][0][1] += 40;
+                piecePosition[0][2][0] -= 40;
+                piecePosition[0][2][1] -= 40;
+                piecePosition[0][3][0] += 40;
+                piecePosition[0][3][1] -= 40;
             } else if (rot == 2) {
                 rot = 3;
+                piecePosition[0][0][0] -= 40;
+                piecePosition[0][0][1] += 40;
+                piecePosition[0][2][0] += 40;
+                piecePosition[0][2][1] -= 40;
+                piecePosition[0][3][0] += 40;
+                piecePosition[0][3][1] += 40;
             } else {
-                rot = 4;
+                rot = 0;
+                piecePosition[0][0][0] -= 40;
+                piecePosition[0][0][1] -= 40;
+                piecePosition[0][2][0] += 40;
+                piecePosition[0][2][1] += 40;
+                piecePosition[0][3][0] -= 40;
+                piecePosition[0][3][1] += 40;
             }
         }
     }
