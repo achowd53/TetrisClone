@@ -2,19 +2,17 @@ import javax.swing.*;
 import java.awt.*;
 
 public class tetrisFrame extends JPanel {
-    private boolean gameRunning;
+    private boolean gameStarted;
     private int[][] board;
     private tetrisPiece curPiece;
     private tetrisPiece nextPiece;
 
-    public tetrisFrame() {
-    };
-
-    public tetrisFrame(boolean gameRunning, int[][] board, tetrisPiece curPiece, tetrisPiece nextPiece) {
-        this.gameRunning = gameRunning;
+    public void updateFrame(boolean gameStarted, int[][] board, tetrisPiece curPiece, tetrisPiece nextPiece) {
+        this.gameStarted = gameStarted;
         this.board = board;
         this.curPiece = curPiece;
         this.nextPiece = nextPiece;
+        repaint();
     }
 
     // Red, Orange, Yellow, Lime, Cyan, Cerulean, Magenta, Rose, Gray
