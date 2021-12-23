@@ -1,3 +1,5 @@
+package tetrisGame;
+
 import java.awt.Color;
 
 public class tetrisPiece {

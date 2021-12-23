@@ -1,7 +1,12 @@
+package tetrisGame;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class tetrisFrame extends JPanel {
+    private boolean gameRunning;
+
+    private int[][] a;
 
     @Override
     protected void paintComponent(Graphics g) {
