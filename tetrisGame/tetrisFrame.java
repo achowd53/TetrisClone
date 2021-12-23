@@ -1,6 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import tetrisGame.tetrisPiece;
 
 public class tetrisFrame extends JPanel {
     private boolean gameRunning;
