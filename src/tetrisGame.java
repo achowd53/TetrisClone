@@ -1,20 +1,19 @@
 import javax.swing.*;
-
 import java.awt.event.*;
 import java.util.Arrays;
 import java.util.Random;
 
-public class tetrisData {
+public class tetrisGame {
     private static int linesCleared = 0;
-    private static int[][] board = { { 0, 720, 2 }, { 40, 720, 2 }, { 80, 720, 2 }, { 120, 720, 2 }, { 240, 720, 3 },
-            { 280, 720, 8 }, { 320, 720, 7 }, { 360, 720, 4 }, { 0, 760, 2 }, { 40, 760, 2 }, { 80, 760, 2 },
-            { 120, 760, 2 }, { 240, 760, 3 }, { 280, 760, 8 }, { 320, 760, 7 }, { 360, 760, 4 } };
-    private static boolean gamePaused = false;
+    private static int[][] board = {};
+    private static boolean gameStarted = false;
     private static tetrisPiece curPiece;
     private static tetrisPiece nextPiece;
     private static tetrisFrame content;
+    private static long startTime;
 
     public static class tetrisListener implements KeyListener {
+
         @Override
         public void keyTyped(KeyEvent e) {
         }
@@ -25,46 +24,33 @@ public class tetrisData {
                 curPiece.shiftLeft();
                 if (!curPiece.checkValidBounds(board))
                     curPiece.shiftRight();
-                else {
-                    if (curPiece.checkCollision(board))
-                        connectPiece();
-                    content.updateFrame(!gamePaused, board, curPiece, nextPiece);
-                    if (clearLines())
-                        content.updateFrame(!gamePaused, board, curPiece, nextPiece);
-                }
+                else
+                    updateContent();
             } else if (e.getKeyCode() == KeyEvent.VK_D || e.getKeyCode() == KeyEvent.VK_RIGHT) {
                 curPiece.shiftRight();
                 if (!curPiece.checkValidBounds(board))
                     curPiece.shiftLeft();
-                else {
-                    if (curPiece.checkCollision(board))
-                        connectPiece();
-                    content.updateFrame(!gamePaused, board, curPiece, nextPiece);
-                    if (clearLines())
-                        content.updateFrame(!gamePaused, board, curPiece, nextPiece);
-                }
+                else
+                    updateContent();
             } else if (e.getKeyCode() == KeyEvent.VK_J) {
                 curPiece.rotateLeft();
                 if (!curPiece.checkValidBounds(board))
                     curPiece.rotateRight();
-                else {
-                    if (curPiece.checkCollision(board))
-                        connectPiece();
-                    content.updateFrame(!gamePaused, board, curPiece, nextPiece);
-                    if (clearLines())
-                        content.updateFrame(!gamePaused, board, curPiece, nextPiece);
-                }
+                else
+                    updateContent();
             } else if (e.getKeyCode() == KeyEvent.VK_K) {
                 curPiece.rotateRight();
                 if (!curPiece.checkValidBounds(board))
                     curPiece.rotateLeft();
-                else {
-                    if (curPiece.checkCollision(board))
-                        connectPiece();
-                    content.updateFrame(!gamePaused, board, curPiece, nextPiece);
-                    if (clearLines())
-                        content.updateFrame(!gamePaused, board, curPiece, nextPiece);
+                else
+                    updateContent();
+            } else if (e.getKeyCode() == KeyEvent.VK_S || e.getKeyCode() == KeyEvent.VK_DOWN) {
+                curPiece.downOne();
+                if (!curPiece.checkCollision(board)) {
+                    updateContent();
+                    curPiece.downOne();
                 }
+                updateContent();
             }
         }
 
@@ -93,12 +79,36 @@ public class tetrisData {
         return cleared;
     }
 
+    public static String getTime() {
+        long timeElapsed = (System.nanoTime() - startTime) / ((long) 1e9);
+        int seconds = (int) timeElapsed % 60;
+        String second_part = String.valueOf(seconds);
+        if (seconds < 10)
+            second_part = "0" + second_part;
+        int minutes = (int) timeElapsed / 60;
+        String minute_part = String.valueOf(minutes);
+        if (minutes < 10)
+            minute_part = "0" + minute_part;
+        return minute_part + ":" + second_part;
+    }
+
+    public static void updateContent() {
+        if (curPiece.checkCollision(board))
+            connectPiece();
+        content.updateFrame(!gameStarted, board, curPiece, nextPiece, linesCleared, getTime());
+        if (clearLines())
+            content.updateFrame(!gameStarted, board, curPiece, nextPiece, linesCleared, getTime());
+    }
+
     public static void connectPiece() {
         board = curPiece.addToBoard(board);
         curPiece = nextPiece;
         nextPiece = randomTetrisPiece();
-        if (!curPiece.checkValidBounds(board)) // Lose Game, instead freeze board until new game clicked
+        if (!curPiece.checkValidBounds(board)) { // Lose Game, instead freeze board until new game clicked
             board = new int[][] {};
+            startTime = System.nanoTime();
+            linesCleared = 0;
+        }
     }
 
     public static tetrisPiece randomTetrisPiece() {
@@ -111,13 +121,7 @@ public class tetrisData {
 
     public static void gameLogic() {
         curPiece.downOne();
-        if (!curPiece.checkValidBounds(board))
-            curPiece.upOne();
-        if (curPiece.checkCollision(board))
-            connectPiece();
-        content.updateFrame(!gamePaused, board, curPiece, nextPiece);
-        if (clearLines())
-            content.updateFrame(!gamePaused, board, curPiece, nextPiece);
+        updateContent();
     }
 
     public static void createAndShowGui() {
@@ -130,6 +134,7 @@ public class tetrisData {
         gui.setVisible(true);
         curPiece = new tetrisPiece(tetrisPiece.tetromino.O, 0);
         nextPiece = randomTetrisPiece();
+        startTime = System.nanoTime();
         int delay = 500;
         ActionListener taskPerformer = new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
