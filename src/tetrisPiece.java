@@ -1,4 +1,7 @@
-public class tetrisPiece {
+import java.util.stream.*;
+import java.util.Arrays;
+
+class tetrisPiece {
 
     enum tetromino {
         O, I, S, Z, L, J, T;
@@ -152,7 +155,7 @@ public class tetrisPiece {
                 piecePosition[0][0][0] += 40;
                 piecePosition[0][0][1] -= 40;
                 piecePosition[0][2][0] += 40;
-                piecePosition[0][2][1] = +40;
+                piecePosition[0][2][1] += 40;
                 piecePosition[0][3][1] += 80;
             } else {
                 rot = 0;
@@ -287,6 +290,10 @@ public class tetrisPiece {
                 piecePosition[0][3][1] += 40;
             }
         }
+    }
+
+    public int[][] addToBoard(int[][] board) { // Add piece to board
+        return Stream.concat(Arrays.stream(board), Arrays.stream(this.piecePosition[0])).toArray(int[][]::new);
     }
 
     public int[][] getBoard() { // Return board positions of piece

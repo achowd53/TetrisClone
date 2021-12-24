@@ -79,7 +79,7 @@ public class tetrisFrame extends JPanel {
         gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gui.setContentPane(new tetrisFrame());
         // gui.setLocationByPlatform(true);
-        gui.setSize(600, 800);
+        gui.setSize(600, 840);
         gui.setVisible(true);
     };
 
