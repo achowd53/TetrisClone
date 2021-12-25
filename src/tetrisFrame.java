@@ -81,6 +81,13 @@ public class tetrisFrame extends JPanel {
                 g.drawRect(box[0], box[1], 40, 40);
             }
         }
+        // Add Keybinds in bottom right
+        g.drawString("Keybinds", 475, 640);
+        g.drawString("Shift Left - A or Left Arrow", 425, 660);
+        g.drawString("Shift Right - D or Right Arrow", 425, 680);
+        g.drawString("Shift Down - S or Down Arrow", 425, 700);
+        g.drawString("Rotate Left - J", 425, 720);
+        g.drawString("Rotate Right - K", 425, 740);
     };
 
     public static void createAndShowGui() { // Intializes and Displays GUI

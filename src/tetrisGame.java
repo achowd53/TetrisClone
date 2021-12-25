@@ -16,6 +16,7 @@ public class tetrisGame {
     private static int highScore = 0;
     private static String highTime;
     private static File highScoreFile;
+    private static JButton newGame;
 
     public static class tetrisListener implements KeyListener { // Keyboard Press Listeners for Actions
 
@@ -112,10 +113,7 @@ public class tetrisGame {
     }
 
     public static void loseGame() { // What happens when you lose the game
-        // board = new int[][] {};
         gameStarted = false;
-        // startTime = System.nanoTime();
-        // linesCleared = 0;
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(highScoreFile))) {
             writer.write(String.valueOf(highScore) + "\n" + highTime);
             writer.close();
@@ -157,13 +155,30 @@ public class tetrisGame {
     }
 
     public static void createAndShowGui() { // Initializes and Displays the GUI
+        // Set Up JFrame
         JFrame gui = new JFrame("TetrisClone V1.0.0");
+        // Add Tetris GUI TO JFrame
         content = new tetrisFrame();
+        content.setLayout(null);
+        // Set Up JFrame Defaults
         gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gui.setContentPane(content);
+        // Add Keybind Listener to JFrame
         gui.addKeyListener(new tetrisListener());
+        // Add New Game Button
+        newGame = new JButton("New Game");
+        newGame.setFocusable(false);
+        newGame.setBounds(450, 540, 100, 30);
+        newGame.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                startGame();
+            }
+        });
+        gui.add(newGame);
+        // Show JFrame
         gui.setSize(600, 840);
         gui.setVisible(true);
+        // Read High Score File
         URL path = tetrisGame.class.getResource("tetrisHighScore.txt");
         highScoreFile = new File(path.getFile().replace("%20", " "));
         try (BufferedReader reader = new BufferedReader(new FileReader(highScoreFile))) {
@@ -173,10 +188,8 @@ public class tetrisGame {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        startGame(); // Remove line later unless New Game Button Clicked
-
-        int delay = 500;
+        // Set Up Game Timer
+        int delay = 300;
         ActionListener taskPerformer = new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 if (gameStarted)
