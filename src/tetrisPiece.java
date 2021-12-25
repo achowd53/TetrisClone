@@ -303,4 +303,8 @@ class tetrisPiece {
     public int[][] getNext() { // Return next display of piece
         return this.piecePosition[1];
     }
+
+    public tetromino getPiece() { // Return piece type of tetromino
+        return this.piece;
+    }
 }

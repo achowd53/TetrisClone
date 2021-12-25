@@ -6,31 +6,29 @@ public class tetrisFrame extends JPanel {
     private String timeElapsed;
     private int highScore;
     private String highTime;
-    private boolean gameStarted;
-    private int[][] board;
-    private tetrisPiece curPiece;
-    private tetrisPiece nextPiece;
+    private int[][] board = {};
+    private tetrisPiece curPiece = null;
+    private tetrisPiece nextPiece = null;
 
-    public void updateFrame(boolean gameStarted, int[][] board, tetrisPiece curPiece, tetrisPiece nextPiece,
-            int linesCleared, String timeElapsed, int highScore, String highTime) {
+    public void updateFrame(int[][] board, tetrisPiece curPiece, tetrisPiece nextPiece,
+            int linesCleared, String timeElapsed, int highScore, String highTime) { // Repaints Panel with new data
         this.linesCleared = linesCleared;
         this.timeElapsed = timeElapsed;
         this.highScore = highScore;
         this.highTime = highTime;
-        this.gameStarted = gameStarted;
         this.board = board;
         this.curPiece = curPiece;
         this.nextPiece = nextPiece;
         repaint();
     }
 
-    // Red, Orange, Yellow, Lime, Cyan, Cerulean, Magenta, Rose, Gray
+    // Red, Orange, Yellow, Lime, Cyan, Cerulean, Magenta, Rose, Gray, Black
     private Color[] intColor = { new Color(255, 0, 0), new Color(255, 165, 0), new Color(255, 255, 0),
             new Color(0, 255, 0), new Color(0, 255, 255), new Color(42, 82, 190), new Color(255, 0, 255),
-            new Color(255, 0, 127), new Color(128, 128, 128) };
+            new Color(255, 0, 127), new Color(128, 128, 128), Color.BLACK };
 
     @Override
-    protected void paintComponent(Graphics g) {
+    protected void paintComponent(Graphics g) { // Paints Panel with data
         super.paintComponent(g);
         g.setFont(Font.getFont("Helvetica Nueva Bold"));
         g.setColor(Color.BLACK);
@@ -61,19 +59,21 @@ public class tetrisFrame extends JPanel {
         g.drawString("                 High Score: " + String.valueOf(highScore), 420, 425);
         g.drawString(" Time For High Score: " + highTime, 420, 465);
         // If game has started, display board, next, and tetris piece
-        if (gameStarted) {
-            for (int[] box : board) {
-                g.setColor(intColor[box[2]]);
-                g.fillRect(box[0], box[1], 40, 40);
-                g.setColor(Color.BLACK);
-                g.drawRect(box[0], box[1], 40, 40);
-            }
+        for (int[] box : board) {
+            g.setColor(intColor[box[2]]);
+            g.fillRect(box[0], box[1], 40, 40);
+            g.setColor(Color.BLACK);
+            g.drawRect(box[0], box[1], 40, 40);
+        }
+        if (curPiece != null) {
             for (int[] box : curPiece.getBoard()) {
                 g.setColor(intColor[box[2]]);
                 g.fillRect(box[0], box[1], 40, 40);
                 g.setColor(Color.BLACK);
                 g.drawRect(box[0], box[1], 40, 40);
             }
+        }
+        if (nextPiece != null) {
             for (int[] box : nextPiece.getNext()) {
                 g.setColor(intColor[box[2]]);
                 g.fillRect(box[0], box[1], 40, 40);
@@ -83,7 +83,7 @@ public class tetrisFrame extends JPanel {
         }
     };
 
-    public static void createAndShowGui() {
+    public static void createAndShowGui() { // Intializes and Displays GUI
         JFrame gui = new JFrame("TetrisClone V1.0.0");
         gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gui.setContentPane(new tetrisFrame());

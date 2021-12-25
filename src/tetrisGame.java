@@ -8,7 +8,7 @@ import java.util.Random;
 public class tetrisGame {
     private static int linesCleared = 0;
     private static int[][] board = {};
-    private static boolean gameStarted = false;
+    private static boolean gameStarted = true;
     private static tetrisPiece curPiece;
     private static tetrisPiece nextPiece;
     private static tetrisFrame content;
@@ -17,7 +17,7 @@ public class tetrisGame {
     private static String highTime;
     private static File highScoreFile;
 
-    public static class tetrisListener implements KeyListener {
+    public static class tetrisListener implements KeyListener { // Keyboard Press Listeners for Actions
 
         @Override
         public void keyTyped(KeyEvent e) {
@@ -25,37 +25,39 @@ public class tetrisGame {
 
         @Override
         public void keyPressed(KeyEvent e) {
-            if (e.getKeyCode() == KeyEvent.VK_A || e.getKeyCode() == KeyEvent.VK_LEFT) {
-                curPiece.shiftLeft();
-                if (!curPiece.checkValidBounds(board))
-                    curPiece.shiftRight();
-                else
-                    updateContent();
-            } else if (e.getKeyCode() == KeyEvent.VK_D || e.getKeyCode() == KeyEvent.VK_RIGHT) {
-                curPiece.shiftRight();
-                if (!curPiece.checkValidBounds(board))
+            if (gameStarted) {
+                if (e.getKeyCode() == KeyEvent.VK_A || e.getKeyCode() == KeyEvent.VK_LEFT) { // Shift Left
                     curPiece.shiftLeft();
-                else
-                    updateContent();
-            } else if (e.getKeyCode() == KeyEvent.VK_J) {
-                curPiece.rotateLeft();
-                if (!curPiece.checkValidBounds(board))
-                    curPiece.rotateRight();
-                else
-                    updateContent();
-            } else if (e.getKeyCode() == KeyEvent.VK_K) {
-                curPiece.rotateRight();
-                if (!curPiece.checkValidBounds(board))
+                    if (!curPiece.checkValidBounds(board))
+                        curPiece.shiftRight();
+                    else
+                        updateContent();
+                } else if (e.getKeyCode() == KeyEvent.VK_D || e.getKeyCode() == KeyEvent.VK_RIGHT) { // Shift Right
+                    curPiece.shiftRight();
+                    if (!curPiece.checkValidBounds(board))
+                        curPiece.shiftLeft();
+                    else
+                        updateContent();
+                } else if (e.getKeyCode() == KeyEvent.VK_J) { // Rotate Left
                     curPiece.rotateLeft();
-                else
-                    updateContent();
-            } else if (e.getKeyCode() == KeyEvent.VK_S || e.getKeyCode() == KeyEvent.VK_DOWN) {
-                curPiece.downOne();
-                if (!curPiece.checkCollision(board)) {
-                    updateContent();
+                    if (!curPiece.checkValidBounds(board))
+                        curPiece.rotateRight();
+                    else
+                        updateContent();
+                } else if (e.getKeyCode() == KeyEvent.VK_K) { // Rotate Right
+                    curPiece.rotateRight();
+                    if (!curPiece.checkValidBounds(board))
+                        curPiece.rotateLeft();
+                    else
+                        updateContent();
+                } else if (e.getKeyCode() == KeyEvent.VK_S || e.getKeyCode() == KeyEvent.VK_DOWN) { // Go Down
                     curPiece.downOne();
+                    if (!curPiece.checkCollision(board)) {
+                        updateContent();
+                        curPiece.downOne();
+                    }
+                    updateContent();
                 }
-                updateContent();
             }
         }
 
@@ -64,7 +66,7 @@ public class tetrisGame {
         }
     }
 
-    private static boolean clearLines() {
+    private static boolean clearLines() { // Finds and clears all new filled lines on the board
         int[] fullLines = new int[20];
         boolean cleared = false;
         for (int[] box : board)
@@ -88,7 +90,7 @@ public class tetrisGame {
         return cleared;
     }
 
-    public static String getTime() {
+    public static String getTime() { // Gets Elapsed Time from when game started
         long timeElapsed = (System.nanoTime() - startTime) / ((long) 1e9);
         int seconds = (int) timeElapsed % 60;
         String second_part = String.valueOf(seconds);
@@ -101,32 +103,37 @@ public class tetrisGame {
         return minute_part + ":" + second_part;
     }
 
-    public static void updateContent() {
+    public static void updateContent() { // Updates JPanel Content with new data
         if (curPiece.checkCollision(board))
             connectPiece();
-        content.updateFrame(!gameStarted, board, curPiece, nextPiece, linesCleared, getTime(), highScore, highTime);
+        content.updateFrame(board, curPiece, nextPiece, linesCleared, getTime(), highScore, highTime);
         if (clearLines())
-            content.updateFrame(!gameStarted, board, curPiece, nextPiece, linesCleared, getTime(), highScore, highTime);
+            content.updateFrame(board, curPiece, nextPiece, linesCleared, getTime(), highScore, highTime);
     }
 
-    public static void connectPiece() {
+    public static void loseGame() { // What happens when you lose the game
+        // board = new int[][] {};
+        gameStarted = false;
+        // startTime = System.nanoTime();
+        // linesCleared = 0;
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(highScoreFile))) {
+            writer.write(String.valueOf(highScore) + "\n" + highTime);
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void connectPiece() { // Connects piece to board and generates new piece
         board = curPiece.addToBoard(board);
         curPiece = nextPiece;
         nextPiece = randomTetrisPiece();
         if (!curPiece.checkValidBounds(board)) { // Lose Game, instead freeze board until new game clicked
-            board = new int[][] {};
-            startTime = System.nanoTime();
-            linesCleared = 0;
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(highScoreFile))) {
-                writer.write(String.valueOf(highScore) + "\n" + highTime);
-                writer.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            loseGame();
         }
     }
 
-    public static tetrisPiece randomTetrisPiece() {
+    public static tetrisPiece randomTetrisPiece() { // Generates a new random tetris piece with random color
         tetrisPiece.tetromino[] intToPiece = { tetrisPiece.tetromino.O, tetrisPiece.tetromino.I,
                 tetrisPiece.tetromino.S, tetrisPiece.tetromino.Z, tetrisPiece.tetromino.L,
                 tetrisPiece.tetromino.J, tetrisPiece.tetromino.T };
@@ -134,12 +141,12 @@ public class tetrisGame {
         return new tetrisPiece(intToPiece[rand.nextInt(7)], rand.nextInt(9));
     }
 
-    public static void gameLogic() {
+    public static void gameLogic() { // Main Game Logic Loop for lowering piece by 1 row and updating frame
         curPiece.downOne();
         updateContent();
     }
 
-    public static void createAndShowGui() {
+    public static void createAndShowGui() { // Initializes and Displays the GUI
         JFrame gui = new JFrame("TetrisClone V1.0.0");
         content = new tetrisFrame();
         gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -162,7 +169,8 @@ public class tetrisGame {
         int delay = 500;
         ActionListener taskPerformer = new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                gameLogic();
+                if (gameStarted)
+                    gameLogic();
             }
         };
         new Timer(delay, taskPerformer).start();
