@@ -8,7 +8,7 @@ import java.util.Random;
 public class tetrisGame {
     private static int linesCleared = 0;
     private static int[][] board = {};
-    private static boolean gameStarted = true;
+    private static boolean gameStarted = false;
     private static tetrisPiece curPiece;
     private static tetrisPiece nextPiece;
     private static tetrisFrame content;
@@ -124,6 +124,16 @@ public class tetrisGame {
         }
     }
 
+    public static void startGame() { // Initialize new game
+        board = new int[][] {};
+        linesCleared = 0;
+        startTime = System.nanoTime();
+        gameStarted = true;
+        curPiece = randomTetrisPiece();
+        nextPiece = randomTetrisPiece();
+        content.updateFrame(board, curPiece, nextPiece, linesCleared, getTime(), highScore, highTime);
+    }
+
     public static void connectPiece() { // Connects piece to board and generates new piece
         board = curPiece.addToBoard(board);
         curPiece = nextPiece;
@@ -163,9 +173,9 @@ public class tetrisGame {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        curPiece = randomTetrisPiece();
-        nextPiece = randomTetrisPiece();
-        startTime = System.nanoTime();
+
+        startGame(); // Remove line later unless New Game Button Clicked
+
         int delay = 500;
         ActionListener taskPerformer = new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
