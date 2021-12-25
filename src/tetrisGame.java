@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.event.*;
+import java.io.*;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -11,6 +13,9 @@ public class tetrisGame {
     private static tetrisPiece nextPiece;
     private static tetrisFrame content;
     private static long startTime;
+    private static int highScore = 0;
+    private static String highTime;
+    private static File highScoreFile;
 
     public static class tetrisListener implements KeyListener {
 
@@ -76,6 +81,10 @@ public class tetrisGame {
                 }
             }
         }
+        if (linesCleared > highScore) {
+            highScore = linesCleared;
+            highTime = getTime();
+        }
         return cleared;
     }
 
@@ -95,9 +104,9 @@ public class tetrisGame {
     public static void updateContent() {
         if (curPiece.checkCollision(board))
             connectPiece();
-        content.updateFrame(!gameStarted, board, curPiece, nextPiece, linesCleared, getTime());
+        content.updateFrame(!gameStarted, board, curPiece, nextPiece, linesCleared, getTime(), highScore, highTime);
         if (clearLines())
-            content.updateFrame(!gameStarted, board, curPiece, nextPiece, linesCleared, getTime());
+            content.updateFrame(!gameStarted, board, curPiece, nextPiece, linesCleared, getTime(), highScore, highTime);
     }
 
     public static void connectPiece() {
@@ -108,6 +117,12 @@ public class tetrisGame {
             board = new int[][] {};
             startTime = System.nanoTime();
             linesCleared = 0;
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(highScoreFile))) {
+                writer.write(String.valueOf(highScore) + "\n" + highTime);
+                writer.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -132,7 +147,16 @@ public class tetrisGame {
         gui.addKeyListener(new tetrisListener());
         gui.setSize(600, 840);
         gui.setVisible(true);
-        curPiece = new tetrisPiece(tetrisPiece.tetromino.O, 0);
+        URL path = tetrisGame.class.getResource("tetrisHighScore.txt");
+        highScoreFile = new File(path.getFile().replace("%20", " "));
+        try (BufferedReader reader = new BufferedReader(new FileReader(highScoreFile))) {
+            highScore = Integer.parseInt(reader.readLine());
+            highTime = new String(reader.readLine());
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        curPiece = randomTetrisPiece();
         nextPiece = randomTetrisPiece();
         startTime = System.nanoTime();
         int delay = 500;

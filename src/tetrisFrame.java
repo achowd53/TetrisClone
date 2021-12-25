@@ -4,15 +4,19 @@ import java.awt.*;
 public class tetrisFrame extends JPanel {
     private int linesCleared;
     private String timeElapsed;
+    private int highScore;
+    private String highTime;
     private boolean gameStarted;
     private int[][] board;
     private tetrisPiece curPiece;
     private tetrisPiece nextPiece;
 
     public void updateFrame(boolean gameStarted, int[][] board, tetrisPiece curPiece, tetrisPiece nextPiece,
-            int linesCleared, String timeElapsed) {
+            int linesCleared, String timeElapsed, int highScore, String highTime) {
         this.linesCleared = linesCleared;
         this.timeElapsed = timeElapsed;
+        this.highScore = highScore;
+        this.highTime = highTime;
         this.gameStarted = gameStarted;
         this.board = board;
         this.curPiece = curPiece;
@@ -54,8 +58,8 @@ public class tetrisFrame extends JPanel {
             g.drawLine(420, y, 600, y);
         g.drawString("             Lines Cleared: " + String.valueOf(linesCleared), 420, 345);
         g.drawString("                Time Taken: " + timeElapsed, 420, 385);
-        g.drawString("                 High Score:", 420, 425);
-        g.drawString(" Time For High Score:", 420, 465);
+        g.drawString("                 High Score: " + String.valueOf(highScore), 420, 425);
+        g.drawString(" Time For High Score: " + highTime, 420, 465);
         // If game has started, display board, next, and tetris piece
         if (gameStarted) {
             for (int[] box : board) {
